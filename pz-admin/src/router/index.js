@@ -17,7 +17,7 @@ const routes = [
         path: 'dashboard',
         component: Dashboard,
         meta: {
-          id: 1,
+          id: '1',
           name: '控制台',
           icon: 'Platform',
           path: '/dashboard',
@@ -27,7 +27,7 @@ const routes = [
       {
         path: 'auth',
         meta: {
-          id: 2,
+          id: '2',
           name: '权限管理',
           icon: 'Grid'
         },
@@ -60,13 +60,13 @@ const routes = [
       {
         path: 'vvip',
         meta: {
-          id: 3,
+          id: '3',
           name: 'DIDI陪诊',
           icon: 'BellFilled'
         },
         children: [
           {
-            path: '',
+            path: 'staff',
             alias: ['staff'],
             component: Staff,
             meta: {

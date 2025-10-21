@@ -1,11 +1,13 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px">
+      <el-aside :width="store.isCollapse ? '64px' : '230px'">
         <Aside></Aside>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <NavHeader />
+        </el-header>
         <el-main>
           <RouterView />
         </el-main>
@@ -16,6 +18,10 @@
 
 <script setup>
 import Aside from '../components/Aside.vue'
+import NavHeader from '../components/navHeader.vue'
+import { useMenuStore } from '../store/menu';
+
+const store = useMenuStore()
 </script>
 
 <style lang="less" scoped>
@@ -23,6 +29,9 @@ import Aside from '../components/Aside.vue'
   height: 100vh;
   .el-container {
     height: 100%;
+    .el-header {
+      padding: 0;
+    }
   }
 }
 </style>
