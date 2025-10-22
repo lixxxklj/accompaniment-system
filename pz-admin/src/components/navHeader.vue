@@ -5,21 +5,35 @@
         <component :is="store.isCollapse ? 'Fold' : 'Expand'" />
       </el-icon>
       <ul class="header-navbar flex-box">
-        <li v-for="(item, index) in store.menuList" :key="item.path" class="tab flex-box" :class="{selected: item.meta.path === route.path}">
-          <el-icon><component :is="item.meta.icon"/></el-icon>
+        <li v-for="(item, index) in store.menuList" :key="item.path" class="tab flex-box"
+          :class="{ selected: item.meta.path === route.path }">
+          <el-icon>
+            <component :is="item.meta.icon" />
+          </el-icon>
           <router-link :to="{ path: item.meta.path }">
             {{ item.meta.name }}
           </router-link>
-          <el-icon class="close-icon" @click="removeTab(item, index)"><Close /></el-icon>
+          <el-icon class="close-icon" @click="removeTab(item, index)">
+            <Close />
+          </el-icon>
         </li>
       </ul>
     </div>
     <div class="header-right flex-box">
-      <el-avatar 
-        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" 
-        :size="32"
-      />
-      <span>admin</span>
+      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32" />
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          admin
+          <el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="loginOut">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -41,14 +55,14 @@ const removeTab = (item, index) => {
   store.removeMenu(item)
   // console.log(item, route)
   // 判断关闭的是不是当前页
-  if(item.meta.path !== route.path) {
+  if (item.meta.path !== route.path) {
     return
   }
   const menuList = store.menuList
   // 判断关闭的是否为最后一个tab
-  if(index === menuList.length) {
+  if (index === menuList.length) {
     // 判断tab是否为多个
-    if(!menuList.length) {
+    if (!menuList.length) {
       router.push('/')
     } else {
       router.push(menuList[index - 1].meta.path)
@@ -58,6 +72,10 @@ const removeTab = (item, index) => {
   }
 }
 
+const loginOut = () => {
+  router.push('/login')
+}
+
 </script> 
 
 <style lang="less" scoped>
@@ -65,53 +83,64 @@ const removeTab = (item, index) => {
   display: flex;
   align-items: center;
 }
+
 .nav-header {
   height: 100%;
   justify-content: space-between;
   padding: 0;
   padding-right: 25px;
+
   .header-left {
     height: 100%;
+
     .icon {
       width: 45px;
       height: 100%;
+
       &:hover {
         background-color: #f5f5f5;
         cursor: pointer;
       }
     }
+
     .header-navbar {
       height: 100%;
+
       .tab {
         padding: 0 10px;
         height: 100%;
         gap: 3px;
+
         .close-icon {
           visibility: hidden;
         }
+
         &:hover {
           background-color: #f5f5f5;
           cursor: pointer;
+
           .close-icon {
             visibility: visible;
           }
         }
       }
+
       .selected {
         color: #409eff;
         background-color: #f5f5f5;
+
         a {
           color: #409eff;
         }
+
         .close-icon {
           visibility: visible;
         }
       }
     }
   }
-  
+
   .header-right {
     gap: 10px;
   }
-}
-</style>
+}</style>
