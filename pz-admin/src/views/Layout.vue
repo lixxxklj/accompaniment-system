@@ -32,6 +32,10 @@ const store = useMenuStore()
     .el-header {
       padding: 0;
     }
+    .el-main {
+      padding: 0 15px;
+      background-color: #f5f5f5;
+    }
   }
 }
 </style>

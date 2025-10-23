@@ -1,6 +1,189 @@
+<!-- 为用户分配角色，享有角色权限 -->
 <template>
-  Admin
+  <panel-header 
+    title="账号管理"
+    describe="管理员可以进行编辑，权限修改后需要登出才会生效"
+  />
+  <div class="container">
+    <el-table :data="listData.list">
+      <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
+      <el-table-column prop="name" label="昵称" align="center"></el-table-column>
+      <el-table-column prop="permission" label="所属组别" align="center"></el-table-column>
+      <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>
+      <el-table-column prop="active" label="状态" align="center">
+        <template #default="scope">
+          <el-tag
+            :type="scope.row.active === '正常' ? 'success' : 'warning'"
+          >{{ scope.row.active }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="create_time" label="创建时间" align="center">
+        <template #default="scope">
+          <div class="create-time">
+            <el-icon><Clock /></el-icon>
+            <span>{{ scope.row.create_time }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template #default="scope">
+          <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination 
+      v-model:current-page="paginationData.pageNum"
+      :page-size="paginationData.pageSize"
+      layout="total, prev, pager, next"
+      :total="listData.total"
+      size="small"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      style="justify-content: end;"
+    />
+  </div>
+  <el-dialog 
+    v-model="dialogVisible" 
+    title="添加权限" 
+    width="500" 
+    :before-close="handleClose"
+  >
+    <el-form ref="formRef" :model="formData" :rules="rules" label-width="120px" label-position="left">
+      <el-form-item label="手机号">
+        <el-input v-model="formData.mobile" disabled />
+      </el-form-item>
+      <el-form-item label="昵称" prop="name">
+        <el-input v-model="formData.name" placeholder="请填写权限名称" />
+      </el-form-item>
+      <el-form-item label="菜单权限" prop="name">
+        <el-select v-model="formData.permissions_id">
+          <el-option 
+            v-for="option in roleList" 
+            :key="option.id"
+            :value="option.id" 
+            :label="option.name" 
+          />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="handleClose">取消</el-button>
+        <el-button type="primary" @click="submit(formRef)">提交</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 <script setup>
+import { authAdmin, menuSelectList, updateUser } from '../../api/index'
+import { ref, reactive, onMounted } from 'vue'
+import dayjs from 'dayjs'
+
+const formRef = ref()
+
+onMounted(async () => {
+  try {
+    await getSelectList()
+    // 获取列表数据
+    await getListData()
+  } catch (error) {
+    console.error('获取数据失败:', error)
+  }
+})
+
+const paginationData = reactive({
+  pageNum: 1,
+  pageSize: 10
+})
+const listData = reactive({
+  list: [],
+  total: 0
+})
+async function getListData() {
+  const res = await authAdmin(paginationData)
+  if(res.code === 10000) {
+    listData.list = res.data.list.map(item => ({
+      ...item,
+      active: item.active ? '正常' : '失效',
+      create_time: dayjs(item.create_time).format('YYYY-MM-DD'),
+      permission: roleList.value.find(role => role.id === item.permissions_id).name
+    }))
+    listData.total = res.data.total
+  }
+}
+
+function handleSizeChange(val) {
+  paginationData.pageSize = val
+}
+function handleCurrentChange(val) {
+  paginationData.pageNum = val
+}
+
+const formData = reactive({         // form数据
+  mobile: '',
+  name: '',
+  permissions_id: ''
+})
+const rules = {                     // 校验规则
+  name: [{ required: true, message: '昵称不可为空', trigger: 'blur' }]
+}
+
+const dialogVisible = ref(false)      // 弹框的显示与隐藏
+const roleList = ref([])
+const handleClose = () => {         // 关闭弹框
+  dialogVisible.value = false
+  // 重置表单
+  formRef.value.resetFields()
+}
+const edit = async ({ mobile, name, permissions_id }) => {      // 打开弹框，编辑权限
+  // 因为这里不需要操作/读取dom，所以不需要nextTick
+  dialogVisible.value = true
+  Object.assign(formData, { mobile, name, permissions_id })
+}
+async function getSelectList() {
+  try {
+    const res = await menuSelectList()
+    if(res.code === 10000) {
+      roleList.value = res.data
+    }
+  } catch (error) {
+    ElMessage.error('菜单权限获取失败')
+  }
+}
+
+function submit(formEl) {
+  if(!formEl) return
+  formEl.validate(async (validate, field) => {
+    if(!validate) {
+      ElMessage.warning('请完善表单信息')
+    }
+    try {
+      const data = {
+        ...formData
+      }
+      delete data.mobile
+      const res = await updateUser(data)
+      if(res.code === 10000) {
+        ElMessage.success('提交成功')
+        getListData()
+        handleClose()
+      }
+    } catch (error) {
+      ElMessage.error(error)
+    }
+  })
+}
+
 </script>
+<style lang="less" scoped>
+.container {
+  padding: 10px;
+  background-color: #fff;
+}
+.create-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+</style>
 

@@ -150,11 +150,12 @@ const submitForm = async () => {
       } else {
         const res = await login(loginForm)
         if (res.code === 10000) {
-          ElMessage.success('登录成功')
+          console.log(res)
           // 将用户信息和token缓存在浏览器
-          localStorage.setItem('TOKEN', res.token)
+          localStorage.setItem('TOKEN', res.data.token)
           localStorage.setItem('USERINFO', JSON.stringify(res.data.userInfo))
           router.push('/')
+          ElMessage.success('登录成功')
         }
       }
     } catch (error) {

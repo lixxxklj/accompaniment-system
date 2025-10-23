@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router/index' 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
+import PanelHeader from './components/PanelHeader.vue'
 
 // 用户鉴权(全局守卫)
 router.beforeEach((to, from) => {
@@ -21,6 +22,8 @@ router.beforeEach((to, from) => {
 
 const pinia = createPinia()
 const app = createApp(App)
+// 挂载公共组件
+app.component('panel-header', PanelHeader)
 
 // 路由挂载
 app.use(router)

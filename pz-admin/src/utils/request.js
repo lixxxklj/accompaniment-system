@@ -25,12 +25,13 @@ instance.interceptors.response.use(response => {
   if(response.data.code === -1) {
     // console.log(response)
     ElMessage.warning(response.data.msg || response.data.message?.msg || response.data.message)
-  } else if(response.data.code === -1 === -2) {
+  } else if(response.data.code === -2) {
     // token 过期
     localStorage.removeItem('TOKEN')
     localStorage.removeItem('USERINFO')
     // 跳转到同源的根目录：http://localhost:5173/
     window.location.href = window.location.origin
+    ElMessage.error('token过期，请重新登录')
   }
   // 直接返回data，调用层少一层 .data
   return response.data
