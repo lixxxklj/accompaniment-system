@@ -10,7 +10,7 @@
     @close="handleClose"
   >
     <h1 class="header-title">{{ store.isCollapse ? 'DIDI' : 'DIDI陪诊'}}</h1>
-    <MenuTree :menuData="menuData" />
+    <MenuTree :menuData="menuData" :index="1"/>
   </el-menu>
 </template>
 
@@ -21,9 +21,10 @@ import { reactive } from 'vue';
 import { useMenuStore } from '../store/menu';
 
 const router = useRouter()
-// console.log(router.options.routes[0].children)
-const menuData = reactive(router.options.routes[0].children)
 const store = useMenuStore()
+// console.log(router.options.routes[0].children)
+// const menuData = reactive(router.options.routes[0].children)
+const menuData = store.dynamicMenu
 
 const handleOpen = (key, keyPath) => {
   console.log(key, keyPath)

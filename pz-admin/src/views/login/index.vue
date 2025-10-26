@@ -35,24 +35,29 @@
 </template>
 
 <script setup>
-import { getCode, register, login } from '../../api/index'
-import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
+import { getCode, register, login, menuPermissions } from '../../api/index'
+import { ref, reactive, onUnmounted, nextTick, computed, toRaw } from 'vue'
 import { useRouter } from 'vue-router';
+import { useMenuStore } from '../../store/menu';
+
 const router = useRouter()
+const store = useMenuStore()
 const src = new URL('../../../public/login.png', import.meta.url).href
 let isLoading = ref(false)
 const formType = ref(0)   // 切换表单（0登录 1注册）
 
 // 表单数据
 const loginForm = reactive({
-  userName: '',
-  passWord: '',
+  userName: '17779017287',
+  passWord: '17779017287',
   validCode: ''
 })
 
 // 点击切换登录 / 注册
 const handleLink = () => {
   formType.value = formType.value ? 0 : 1
+  // 重置验证码锁
+  Object.assign(validCodeData, { sending: false, title: '发送验证码', time: 60 })
   nextTick(() => {
     ruleForm.value?.resetFields()
   })
@@ -78,12 +83,12 @@ const validatorPsw = (rule, value, callback) => {
     pswReg.test(value) ? callback() : callback(new Error('密码需要8~16位字符，请重新设置'))
   }
 }
-// 表单校验
-const rules = reactive({
+// 表单校验(用计算属性让校验规则随formType实时变化)
+const rules = computed(() => ({
   userName: [{ validator: validatorUser, trigger: 'blur' }],
   passWord: [{ validator: validatorPsw, trigger: 'blur' }],
   ...(formType.value === 1 ? { validCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }] } : {})
-})
+}))
 
 // 验证码
 const validCodeData = reactive({
@@ -150,11 +155,24 @@ const submitForm = async () => {
       } else {
         const res = await login(loginForm)
         if (res.code === 10000) {
-          console.log(res)
           // 将用户信息和token缓存在浏览器
           localStorage.setItem('TOKEN', res.data.token)
           localStorage.setItem('USERINFO', JSON.stringify(res.data.userInfo))
-          router.push('/')
+          // 登录成功后获取用户有权限的菜单
+          menuPermissions().then(async (res) => {
+            if(res.code === 10000) {
+              // 在 pinia 中存储（Aside 和 menuTree 中需要用到）
+              await store.setDynamicMenu(res.data)
+              // 取出pinia中的响应数据
+              const dynamicMenu = store.dynamicMenu
+              // 将响应式数据转换为原始对象再注册路由
+              toRaw(dynamicMenu).forEach(element => {
+                router.addRoute('main', element)
+              })
+              // 跳转首页
+              router.push('/')
+            }
+          })
           ElMessage.success('登录成功')
         }
       }

@@ -29,6 +29,7 @@ instance.interceptors.response.use(response => {
     // token 过期
     localStorage.removeItem('TOKEN')
     localStorage.removeItem('USERINFO')
+    localStorage.removeItem('menu')
     // 跳转到同源的根目录：http://localhost:5173/
     window.location.href = window.location.origin
     ElMessage.error('token过期，请重新登录')

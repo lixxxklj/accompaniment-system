@@ -1,11 +1,13 @@
 <template>
   <div class="header">
-    <h3 class="describe">{{ title }}</h3>
+    <h3 class="describe">{{ name }}</h3>
     <p>{{ describe }}</p>
   </div>
 </template>
 <script setup>
-const props = defineProps(['title', 'describe'])
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const { name, describe }  = route.meta
 </script>
 <style lang="less" scoped>
 .header {

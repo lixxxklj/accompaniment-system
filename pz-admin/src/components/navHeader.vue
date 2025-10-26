@@ -21,7 +21,7 @@
     </div>
     <div class="header-right flex-box">
       <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32" />
-      <el-dropdown>
+      <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
           admin
           <el-icon class="el-icon--right">
@@ -30,7 +30,7 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="loginOut">退出登录</el-dropdown-item>
+            <el-dropdown-item command="exit">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -72,8 +72,14 @@ const removeTab = (item, index) => {
   }
 }
 
-const loginOut = () => {
-  router.push('/login')
+const handleCommand = (command) => {
+  if(command === 'exit') {
+    localStorage.removeItem('TOKEN')
+    localStorage.removeItem('USERINFO')
+    localStorage.removeItem('menu')
+    router.push('/login')
+    // window.location.href = window.location.origin
+  }
 }
 
 </script> 

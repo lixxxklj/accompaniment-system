@@ -1,9 +1,6 @@
 <!-- 为用户分配角色，享有角色权限 -->
 <template>
-  <panel-header 
-    title="账号管理"
-    describe="管理员可以进行编辑，权限修改后需要登出才会生效"
-  />
+  <panel-header/>
   <div class="container">
     <el-table :data="listData.list">
       <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
@@ -75,7 +72,7 @@
   </el-dialog>
 </template>
 <script setup>
-import { authAdmin, menuSelectList, updateUser } from '../../api/index'
+import { authAdmin, menuSelectList, updateUser } from '../../../api/index'
 import { ref, reactive, onMounted } from 'vue'
 import dayjs from 'dayjs'
 
@@ -158,11 +155,7 @@ function submit(formEl) {
       ElMessage.warning('请完善表单信息')
     }
     try {
-      const data = {
-        ...formData
-      }
-      delete data.mobile
-      const res = await updateUser(data)
+      const res = await updateUser({ name: formData.name, permissions_id: formData.permissions_id })
       if(res.code === 10000) {
         ElMessage.success('提交成功')
         getListData()

@@ -1,10 +1,10 @@
 import Layout from '../views/Layout.vue'
 import Login from '../views/login/index.vue'
-import Dashboard from '../views/dashboard/Dashboard.vue'
-import Admin from '../views/auth/Admin.vue'
-import Group from '../views/auth/Group.vue'
-import Staff from '../views/vvip/Staff.vue'
-import Order from '../views/vvip/Order.vue'
+import Dashboard from '../views/dashboard/index.vue'
+import Admin from '../views/auth/Admin/index.vue'
+import Group from '../views/auth/Group/index.vue'
+import Staff from '../views/vppz/Staff/index.vue'
+import Order from '../views/vppz/Order/index.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
@@ -13,7 +13,7 @@ const routes = [
     component: Layout,
     name: 'main',
     children: [
-      {
+      /* {
         path: 'dashboard',
         component: Dashboard,
         meta: {
@@ -58,7 +58,7 @@ const routes = [
         ]
       },
       {
-        path: 'vvip',
+        path: 'vppz',
         meta: {
           id: '3',
           name: 'DIDI陪诊',
@@ -73,7 +73,7 @@ const routes = [
               id: '3-1',
               name: '陪护管理',
               icon: 'Checked',
-              path: '/vvip/staff',
+              path: '/vppz/staff',
               describe: '陪护管理'
             }
           },
@@ -84,12 +84,12 @@ const routes = [
               id: '3-2',
               name: '订单管理',
               icon: 'List',
-              path: '/vvip/order',
+              path: '/vppz/order',
               describe: '订单管理'
             }
           }
         ]
-      }
+      } */
     ]
   },
   {

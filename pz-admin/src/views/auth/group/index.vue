@@ -1,9 +1,6 @@
 <!-- 配置权限：添加角色权限 -->
 <template>
-  <panel-header 
-    title="菜单管理" 
-    describe="菜单规则通常对应一个控制器的方法，同时菜单栏数据也从规则中获取"
-  />
+  <panel-header />
   <div class="container">
     <el-button type="primary" icon="Plus" size="small" @click="addMenu">新增</el-button>
     <el-table :data="menuData.list">
@@ -59,7 +56,7 @@
   </el-dialog>
 </template>
 <script setup>
-import { userGetMenu, menuList, userSetMenu } from '../../api/index'
+import { userGetMenu, menuList, userSetMenu } from '../../../api/index'
 import { ref, reactive, onMounted, nextTick } from 'vue'
 
 const defaultCheckedKeys = ref([4, 5])
