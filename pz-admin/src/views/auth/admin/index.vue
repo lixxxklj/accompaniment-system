@@ -3,7 +3,7 @@
   <panel-header/>
   <div class="container">
     <el-table :data="listData.list">
-      <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
+      <el-table-column type="index" label="序号" align="center" width="60"></el-table-column>
       <el-table-column prop="name" label="昵称" align="center"></el-table-column>
       <el-table-column prop="permission" label="所属组别" align="center"></el-table-column>
       <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>

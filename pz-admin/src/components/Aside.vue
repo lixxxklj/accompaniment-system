@@ -3,11 +3,11 @@
     active-text-color="#ffd04b" 
     background-color="#545c64" 
     class="aside-demo" 
-    default-active="2"
     text-color="#fff" 
     :collapse="store.isCollapse"
     @open="handleOpen" 
     @close="handleClose"
+    :default-active="menuActive"
   >
     <h1 class="header-title">{{ store.isCollapse ? 'DIDI' : 'DIDI陪诊'}}</h1>
     <MenuTree :menuData="menuData" :index="1"/>
@@ -17,7 +17,7 @@
 <script setup>
 import MenuTree from './menuTree.vue'
 import { useRouter } from 'vue-router'
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import { useMenuStore } from '../store/menu';
 
 const router = useRouter()
@@ -32,6 +32,7 @@ const handleOpen = (key, keyPath) => {
 const handleClose = (key, keyPath) => {
   console.log(key, keyPath)
 }
+const menuActive = computed(() => store.menuActive)
 </script>
 
 <style scoped>

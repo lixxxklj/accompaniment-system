@@ -6,7 +6,8 @@ export const useMenuStore = defineStore('menu', {
     return {
       isCollapse: false,
       menuList: [],         // 面包屑
-      dynamicMenu: []       // 用户有权限的菜单
+      dynamicMenu: [],       // 用户有权限的菜单
+      menuActive: '1-1'
     }
   },
   actions: {
@@ -45,6 +46,9 @@ export const useMenuStore = defineStore('menu', {
         this.dynamicMenu = menu
         resolve()
       })
+    },
+    updateMenuActive(active) {
+      this.menuActive = active
     }
   }
 })

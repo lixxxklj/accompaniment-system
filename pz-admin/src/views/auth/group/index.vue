@@ -4,7 +4,7 @@
   <div class="container">
     <el-button type="primary" icon="Plus" size="small" @click="addMenu">新增</el-button>
     <el-table :data="menuData.list">
-      <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
+      <el-table-column type="index" label="序号" align="center" width="60"></el-table-column>
       <el-table-column prop="name" label="名称" align="center"></el-table-column>
       <el-table-column prop="permissionName" label="权限" align="center"></el-table-column>
       <el-table-column label="操作" align="center">

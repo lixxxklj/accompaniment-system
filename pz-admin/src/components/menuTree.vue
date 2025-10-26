@@ -18,7 +18,7 @@
     <el-menu-item 
       v-else
       :index="`${props.index}-${item.meta.id}`"
-      @click="handleClick(item)"
+      @click="handleClick(item, `${props.index}-${item.meta.id}`)"
     >
       <el-icon size="20">
         <component :is="item.meta.icon" />
@@ -37,10 +37,11 @@ const props = defineProps(['menuData', 'index'])
 const router = useRouter()
 const store = useMenuStore()
 
-const handleClick = (item) => {
+const handleClick = (item, active) => {
   router.push(item.meta.path)
   store.addMenu(item)
-  // console.log(store.menuList)
+  // console.log(active)
+  store.updateMenuActive(active)
 }
 
 </script>

@@ -20,10 +20,10 @@
       </ul>
     </div>
     <div class="header-right flex-box">
-      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32" />
+      <el-avatar :src="avatar" :size="32" />
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
-          admin
+          {{ name }}
           <el-icon class="el-icon--right">
             <arrow-down />
           </el-icon>
@@ -46,6 +46,7 @@ import { useRouter } from 'vue-router';
 const store = useMenuStore()
 const route = useRoute()
 const router = useRouter()
+const { avatar, name } = JSON.parse(localStorage.getItem('USERINFO'))
 
 const handleCollapse = () => {
   store.collapsed()
