@@ -1,29 +1,16 @@
 <!-- 配置权限：添加角色权限 -->
 <template>
   <panel-header />
-  <div class="container">
-    <el-button type="primary" icon="Plus" size="small" @click="addMenu">新增</el-button>
-    <el-table :data="menuData.list">
-      <el-table-column type="index" label="序号" align="center" width="60"></el-table-column>
-      <el-table-column prop="name" label="名称" align="center"></el-table-column>
-      <el-table-column prop="permissionName" label="权限" align="center"></el-table-column>
-      <el-table-column label="操作" align="center">
-        <template #default="scope">
-          <el-button type="primary" @click="editMenu(scope.row)">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination 
-      v-model:current-page="paginationData.pageNum"
-      :page-size="paginationData.pageSize"
-      layout="total, prev, pager, next"
-      :total="menuData.total"
-      size="small"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      style="justify-content: end;"
-    />
-  </div>
+  <container-table 
+    v-bind="tableData"
+    @edit="editMenu"
+    @handleSizeChange="handleSizeChange"
+    @handleCurrentChange="handleCurrentChange"
+  >
+    <template #btn>
+      <el-button type="primary" icon="Plus" size="small" @click="addMenu">新增</el-button>
+    </template>
+  </container-table>
   <el-dialog 
     v-model="dialogVisible" 
     title="添加权限" 
@@ -74,27 +61,29 @@ onMounted(async () => {
   }
 })
 
-const paginationData = reactive({
+const tableData = reactive({
   pageNum: 1,
-  pageSize: 10
-})
-const menuData = reactive({
+  pageSize: 10,
   list: [],
-  total: 0
+  total: 0,
+  tableHeader: [
+    { label: '名称', prop: 'name' },
+    { label: '权限', prop: 'permissionName' }
+  ]
 })
 async function getMenuData() {
-  const res = await menuList(paginationData)
+  const res = await menuList({ pageNum: tableData.pageNum, pageSize: tableData.pageSize })
   if(res.code === 10000) {
-    menuData.list = res.data.list
-    menuData.total = res.data.total
+    tableData.list = res.data.list
+    tableData.total = res.data.total
   }
 }
 
 function handleSizeChange(val) {
-  paginationData.pageSize = val
+  tableData.pageSize = val
 }
 function handleCurrentChange(val) {
-  paginationData.pageNum = val
+  tableData.pageNum = val
 }
 
 const formData = reactive({         // form数据

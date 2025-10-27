@@ -5,6 +5,7 @@ import router from './router/index'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
 import PanelHeader from './components/PanelHeader.vue'
+import ContainerTable from './components/containerTable.vue'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { useMenuStore } from './store/menu'
 
@@ -44,6 +45,7 @@ router.beforeEach(async (to, from) => {
 
 // 挂载公共组件
 app.component('panel-header', PanelHeader)
+app.component('container-table', ContainerTable)
 // 路由挂载
 app.use(router)
 

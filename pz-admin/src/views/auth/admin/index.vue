@@ -1,44 +1,12 @@
 <!-- 为用户分配角色，享有角色权限 -->
 <template>
   <panel-header/>
-  <div class="container">
-    <el-table :data="listData.list">
-      <el-table-column type="index" label="序号" align="center" width="60"></el-table-column>
-      <el-table-column prop="name" label="昵称" align="center"></el-table-column>
-      <el-table-column prop="permission" label="所属组别" align="center"></el-table-column>
-      <el-table-column prop="mobile" label="手机号" align="center"></el-table-column>
-      <el-table-column prop="active" label="状态" align="center">
-        <template #default="scope">
-          <el-tag
-            :type="scope.row.active === '正常' ? 'success' : 'warning'"
-          >{{ scope.row.active }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="create_time" label="创建时间" align="center">
-        <template #default="scope">
-          <div class="create-time">
-            <el-icon><Clock /></el-icon>
-            <span>{{ scope.row.create_time }}</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center">
-        <template #default="scope">
-          <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination 
-      v-model:current-page="paginationData.pageNum"
-      :page-size="paginationData.pageSize"
-      layout="total, prev, pager, next"
-      :total="listData.total"
-      size="small"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      style="justify-content: end;"
-    />
-  </div>
+  <container-table
+    v-bind="tableData"
+    @edit="edit"
+    @handleSizeChange="handleSizeChange"
+    @handleCurrentChange="handleCurrentChange"
+  />
   <el-dialog 
     v-model="dialogVisible" 
     title="添加权限" 
@@ -88,32 +56,37 @@ onMounted(async () => {
   }
 })
 
-const paginationData = reactive({
+const tableData = reactive({
   pageNum: 1,
-  pageSize: 10
-})
-const listData = reactive({
+  pageSize: 10,
   list: [],
-  total: 0
+  total: 0,
+  tableHeader: [
+    { label: '昵称', prop: 'name' },
+    { label: '所属组别', prop: 'permission' },
+    { label: '手机号', prop: 'mobile' },
+    { label: '状态', prop: 'active' },
+    { label: '创建时间', prop: 'create_time' }
+  ]
 })
 async function getListData() {
-  const res = await authAdmin(paginationData)
+  const res = await authAdmin({ pageNum: tableData.pageNum, pageSize: tableData.pageSize })
   if(res.code === 10000) {
-    listData.list = res.data.list.map(item => ({
+    tableData.list = res.data.list.map(item => ({
       ...item,
       active: item.active ? '正常' : '失效',
       create_time: dayjs(item.create_time).format('YYYY-MM-DD'),
       permission: roleList.value.find(role => role.id === item.permissions_id).name
     }))
-    listData.total = res.data.total
+    tableData.total = res.data.total
   }
 }
 
 function handleSizeChange(val) {
-  paginationData.pageSize = val
+  tableData.pageSize = val
 }
 function handleCurrentChange(val) {
-  paginationData.pageNum = val
+  tableData.pageNum = val
 }
 
 const formData = reactive({         // form数据
