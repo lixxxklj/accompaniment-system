@@ -34,7 +34,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="submit(formRef)">提交</el-button>
+        <el-button type="primary" @click="submit(formRef)">确认</el-button>
       </div>
     </template>
   </el-dialog>
@@ -84,9 +84,12 @@ async function getListData() {
 
 function handleSizeChange(val) {
   tableData.pageSize = val
+  // 重新获取分页数据
+  getListData()
 }
 function handleCurrentChange(val) {
   tableData.pageNum = val
+  getListData()
 }
 
 const formData = reactive({         // form数据

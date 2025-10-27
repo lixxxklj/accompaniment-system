@@ -2,15 +2,16 @@
 <template>
   <div class="container">
     <slot name="btn" />
-    <el-table :data="props.list">
+    <el-table :data="props.list" @selectionChange="handleSelectionChange" row-key="id">
+      <slot name="select" />
       <el-table-column type="index" label="序号" align="center" width="60"></el-table-column>
       <template v-for="item in props.tableHeader">
         <template v-if="item.prop === 'active'">
           <el-table-column prop="active" :label="item.label" align="center">
             <template #default="scope">
               <el-tag
-                :type="scope.row.active === '正常' ? 'success' : 'warning'"
-              >{{ scope.row.active }}</el-tag>
+                :type="scope.row.active ? 'success' : 'warning'"
+              >{{ scope.row.active ? '正常' : '失效' }}</el-tag>
             </template>
           </el-table-column>
         </template>
@@ -21,6 +22,13 @@
                 <el-icon><Clock /></el-icon>
                 <span>{{ scope.row.create_time }}</span>
               </div>
+            </template>
+          </el-table-column>
+        </template>
+        <template v-else-if="item.prop === 'avatar'">
+          <el-table-column prop="avatar" :label="item.label" align="center">
+            <template #default="scope">
+              <img :src="scope.row.avatar" class="avatar">
             </template>
           </el-table-column>
         </template>
@@ -48,7 +56,7 @@
 </template>
 <script setup>
 const props = defineProps(['pageNum', 'pageSize', 'list', 'total', 'tableHeader'])
-const emit = defineEmits(['edit', 'handleSizeChange', 'handleCurrentChange'])
+const emit = defineEmits(['edit', 'handleSizeChange', 'handleCurrentChange', 'handleSelectionChange'])
 
 function edit(item) {
   emit('edit', item)
@@ -58,6 +66,9 @@ function handleSizeChange(val) {
 }
 function handleCurrentChange(val) {
   emit('handleCurrentChange', val)
+}
+function handleSelectionChange(val) {
+  emit('handleSelectionChange', val)
 }
 </script>
 <style lang="less" scoped>
@@ -69,6 +80,10 @@ function handleCurrentChange(val) {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+.avatar {
+  height: 50px;
+  width: 50px;
 }
 </style>
 

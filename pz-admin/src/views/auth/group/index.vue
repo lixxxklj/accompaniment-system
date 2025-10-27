@@ -37,7 +37,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="submit(formRef)">提交</el-button>
+        <el-button type="primary" @click="submit(formRef)">确认</el-button>
       </div>
     </template>
   </el-dialog>
@@ -81,9 +81,11 @@ async function getMenuData() {
 
 function handleSizeChange(val) {
   tableData.pageSize = val
+  getMenuData()
 }
 function handleCurrentChange(val) {
   tableData.pageNum = val
+  getMenuData()
 }
 
 const formData = reactive({         // form数据
