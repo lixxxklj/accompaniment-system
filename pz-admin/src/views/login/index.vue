@@ -19,8 +19,8 @@
           <el-form-item v-if="formType" prop="validCode">
             <el-input v-model="loginForm.validCode" placeholder="验证码" prefix-icon="Lock">
               <template #append>
-                <el-button @click="getValidCode" :disabled="validCodeData.sending" style="width: 100px;">{{
-                  validCodeData.title }}</el-button>
+                <el-button @click="getValidCode" :disabled="validCodeData.sending" style="width: 100px;">
+                  {{ validCodeData.title }}</el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -111,7 +111,7 @@ const getValidCode = async () => {
   // 发请求
   try {
     const res = await getCode({ tel: loginForm.userName })
-    console.log(res)
+    // console.log(res)
     if (res.code === 10000) {
       ElMessage.success('发送成功')
       // 倒计时

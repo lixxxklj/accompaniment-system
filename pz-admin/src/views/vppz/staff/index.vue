@@ -1,5 +1,5 @@
 <template>
-  Staff
+  <panel-header />
 </template>
 <script setup>
 </script>
