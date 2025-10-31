@@ -8,7 +8,7 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-  const token = localStorage.getItem('Token')
+  const token = localStorage.getItem('H5_TOKEN')
   const whiteUrl = ['/login']
   if(token && !whiteUrl.includes(config.url)) {
     config.headers['h-token'] = token
@@ -26,7 +26,7 @@ instance.interceptors.response.use(response => {
     localStorage.removeItem('H5_TOKEN')
     localStorage.removeItem('H5_USERINFO')
     window.location.href = window.location.origin
-    showToast('token过期，请重新登录')
+    // showToast('token过期，请重新登录')
   }
   return response.data
 }, err => {

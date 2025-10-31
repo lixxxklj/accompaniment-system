@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="contain">
     <img src="../../assets/logo.png" class="logo">
     <h3>用户登录</h3>
     <van-form @submit="onSubmit">
@@ -32,17 +32,24 @@ const formDate = reactive({
 
 async function onSubmit() {
   const { code, data } = await proxy.$api.login(formDate)
-  if(code === 10000) {
+  if (code === 10000) {
     localStorage.setItem('H5_TOKEN', data.token)
-    localStorage.setItem('H5_USERINFO', data.userInfo)
+    localStorage.setItem('H5_USERINFO', JSON.stringify(data.userInfo))
     router.push('/home')
   }
 }
 </script>
 <style scoped>
-.logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+.contain {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+  }
 }
 </style>
