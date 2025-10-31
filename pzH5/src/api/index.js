@@ -9,5 +9,8 @@ export default ({
   },
   h5Companion() {
     return request.get('/h5/companion')
+  },
+  createOrder(data) {
+    return request.post('/createOrder', data)
   }
 })

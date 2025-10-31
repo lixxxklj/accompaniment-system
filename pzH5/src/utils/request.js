@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { showToast } from 'vant'
+import { showNotify } from 'vant'
 
 const instance = axios.create({
   baseURL: 'https://v3pz.itndedu.com/v3pz',
@@ -20,13 +20,19 @@ instance.interceptors.request.use(config => {
 
 instance.interceptors.response.use(response => {
   if(response.data.code === -1) {
-    showToast(response.data.msg || response.data.message?.msg || response.data.message)
+    showNotify({
+      type: 'warning',
+      message: response.data.msg || response.data.message?.msg || response.data.message
+    })
   } else if(response.data.code === -2) {
     // token 过期
     localStorage.removeItem('H5_TOKEN')
     localStorage.removeItem('H5_USERINFO')
     window.location.href = window.location.origin
-    // showToast('token过期，请重新登录')
+    showNotify({
+      type: 'warning',
+      message: 'token过期，请重新登录'
+    })
   }
   return response.data
 }, err => {
