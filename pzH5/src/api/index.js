@@ -12,5 +12,8 @@ export default ({
   },
   createOrder(data) {
     return request.post('/createOrder', data)
+  },
+  orderList(params) {
+    return request.get('/order/list', { params })
   }
 })
