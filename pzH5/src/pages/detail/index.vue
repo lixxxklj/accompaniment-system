@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- <StepsBar :state="detailData.trade_state || '已完成'" /> -->
     <StepsBar :state="detailData.trade_state" />
     <div v-if="detailData.trade_state === '待支付'" class="bar-title">
       <h1>订单待支付</h1>
@@ -56,12 +57,12 @@ onMounted(async () => {
 
 const label = reactive({})
 const getLabel = (state) => {
-  if (state === '已完成') {
-    Object.assign(label, { title: '服务已完成', desc: '感谢您的使用，如有售后问题请联系客服' })
-  } else if (state === '待服务') {
+  if (state === '待服务') {
     Object.assign(label, { title: '正在为您安排服务专员...', desc: '请保持手机畅通，稍后将有服务专员与您联系' })
   } else if (state === '已取消') {
     Object.assign(label, { title: '订单已取消', desc: '如需帮助可咨询客服' })
+  } else if(state === '已完成') {
+    Object.assign(label, { title: '服务已完成', desc: '感谢您的使用，如有售后问题请联系客服' })
   }
 }
 

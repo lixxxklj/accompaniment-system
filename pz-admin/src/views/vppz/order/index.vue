@@ -65,7 +65,7 @@ const tableData = reactive({
 const stateMap = {
   '已取消': 'info',
   '待服务': 'primary',
-  '已服务': 'success',
+  '已完成': 'success',
 }
 onMounted(async () => {
   getListData()
@@ -83,6 +83,7 @@ const getListData = async () => {
     avatar: item.companion.avatar,
     mobile: item.client.mobile,
     state: item.trade_state,
+    // state: item.trade_state || '已完成',
     order_time: new dayjs(item.order_start_time).format('YYYY-MM-DD')
   }))
 }

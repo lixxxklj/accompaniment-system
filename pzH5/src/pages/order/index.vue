@@ -49,6 +49,8 @@ const changeTab = async () => {
   const { data } = await proxy.$api.orderList({ state: active.value })
   listData.value = data.map(item => {
     item.timer = Math.floor((item.order_start_time + 7200000 - Date.now()) / 1000)
+    // item.trade_state = item.trade_state ? item.trade_state : '已完成'
+    item.trade_state = item.trade_state
     return item
   })
 }
