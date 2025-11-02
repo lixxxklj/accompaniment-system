@@ -7,14 +7,13 @@ import Staff from '../views/vppz/Staff/index.vue'
 import Order from '../views/vppz/Order/index.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-const menuData = localStorage.getItem('menu')
-
 const routes = [
   {
     path: '/',
     component: Layout,
     // 如果访问'/'，重定向到有权限菜单第一项或者菜单的子项
     redirect: to => {
+      const menuData = localStorage.getItem('menu')
       // 如果没有menuData，回到登录页
       if(!menuData)  return '/login'
       const data = JSON.parse(menuData).dynamicMenu[0]

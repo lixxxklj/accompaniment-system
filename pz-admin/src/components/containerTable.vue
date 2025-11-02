@@ -15,6 +15,13 @@
             </template>
           </el-table-column>
         </template>
+        <template v-if="item.prop === 'state'">
+          <el-table-column prop="state" :label="item.label" align="center">
+            <template #default="scope">
+              <el-tag :type="stateMap[scope.row.state]">{{ scope.row.state }}</el-tag>
+            </template>
+          </el-table-column>
+        </template>
         <template v-else-if="item.prop === 'create_time'">
           <el-table-column prop="create_time" :label="item.label" align="center">
             <template #default="scope">

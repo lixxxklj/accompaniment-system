@@ -72,7 +72,7 @@
   </el-dialog>
 </template>
 <script setup>
-import { companionList, companion, deleteCompanion } from '../../../api/staff'
+import { companionList, companion, deleteCompanion } from '../../../api/vppz'
 import { reactive, onMounted, ref } from 'vue'
 import dayjs from 'dayjs';
 
