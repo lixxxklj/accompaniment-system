@@ -1,7 +1,7 @@
 <template>
   <div class="contain">
     <img src="../../assets/logo.png" class="logo">
-    <h3>用户登录</h3>
+    <h2>用户登录</h2>
     <van-form @submit="onSubmit">
       <van-cell-group inset>
         <van-field v-model="formDate.userName" name="username" label="用户名" placeholder="用户名"
@@ -46,6 +46,7 @@ async function onSubmit() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 15px;
   .logo {
     width: 64px;
     height: 64px;

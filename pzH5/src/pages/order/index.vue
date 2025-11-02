@@ -8,7 +8,7 @@
       <van-tab title="已完成" name="3" />
       <van-tab title="已取消" name="4" />
     </van-tabs>
-    <van-row v-for="item in listData" :key="item.out_trade_no" class="row">
+    <van-row v-for="item in listData" :key="item.out_trade_no" class="row" @click="goDetail(item)">
       <van-col span="6" class="col-img">
         <van-image :src="item.serviceImg" radius="10px" width="56px" height="56px" />
       </van-col>
@@ -26,9 +26,12 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, onMounted } from 'vue'
+import { ref, getCurrentInstance, onMounted, computed } from 'vue'
 import TimeDown from '../../components/TimeDown.vue';
+import { useRouter, useRoute } from 'vue-router';
 
+const router = useRouter()
+const route = useRoute()
 const { proxy } = getCurrentInstance()
 const listData = ref([])
 const colorMap = {
@@ -41,7 +44,7 @@ const colorMap = {
 onMounted(async () => {
   changeTab('')
 })
-const active = ref('')
+const active = ref(route.query.active || '')
 const changeTab = async () => {
   const { data } = await proxy.$api.orderList({ state: active.value })
   listData.value = data.map(item => {
@@ -53,6 +56,11 @@ const changeTab = async () => {
 // 倒计时结束的回调
 const finish = () => {
   changeTab()
+}
+
+// 点击列表进入详情页
+const goDetail = ({ out_trade_no }) => {
+  router.push(`/detail?oid=${out_trade_no}`)
 }
 </script>
 

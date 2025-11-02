@@ -1,14 +1,6 @@
 <template>
   <van-nav-bar title="填写服务订单" left-arrow @click-left="onClickLeft" />
-  <div class="steps">
-    <van-progress :percentage="perMap[active]" stroke-width="14" :show-pivot="false" track-color="#fff" color="#51ac98" />
-    <div class="steps-title">
-      <span>填写订单</span>
-      <span>在线支付</span>
-      <span>专人服务</span>
-      <span>服务完成</span>
-    </div>
-  </div>
+  <StepsBar :state="state" />
   <div class="content">
     <van-cell style="margin-bottom: 5px;">
       <template #title>
@@ -62,6 +54,7 @@ import { useRouter } from 'vue-router'
 import { onMounted, getCurrentInstance, reactive, ref, computed } from 'vue'
 import { showNotify } from 'vant'
 import Qrcode from 'qrcode'
+import StepsBar from '../../components/StepsBar.vue';
 
 const router = useRouter()
 const { proxy } = getCurrentInstance()
@@ -69,8 +62,7 @@ const { proxy } = getCurrentInstance()
 const companion = ref([])
 const hospitals = ref([])
 const service = reactive({})
-const active = ref(0)
-const perMap = [20, 45, 70, 100]
+const state = ref('创建订单')
 
 const formData = reactive({})
 
@@ -143,12 +135,6 @@ const onSubmit = async () => {
 </script>
 
 <style lang="less" scoped>
-::v-deep(.van-progress .van-progress__portion) {
-  height: 65%;
-  top: 50%;
-  transform: translate(0, -50%);
-}
-
 ::v-deep(.van-cell__title) {
   display: flex;
   align-items: center;
@@ -161,20 +147,10 @@ const onSubmit = async () => {
   align-items: center;
   padding-top: 20px;
 }
-.steps {
-  background: linear-gradient(135deg, #5ab78b 0%, #55b7b7 100%);
-  padding: 20px 15px;
-
-  .steps-title {
-    display: flex;
-    justify-content: space-around;
-    color: #fff;
-    margin-top: 15px;
-  }
-}
 
 .content {
   background-color: #f5f5f5;
   padding: 5px 8px;
+  height: calc(100vh - 130px);
 }
 </style>

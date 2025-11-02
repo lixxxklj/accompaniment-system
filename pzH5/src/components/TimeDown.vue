@@ -1,5 +1,5 @@
 <template>
-  <div>{{ display }}</div>
+  <span>{{ display }}</span>
 </template>
 
 <script setup>
